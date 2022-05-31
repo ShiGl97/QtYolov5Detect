@@ -273,6 +273,7 @@ bool Yolo::Detect(Mat& SrcImg, Net& net, vector<Output>& output) {
                             classIds.push_back(classIdPoint.x);
                             confidences.push_back(max_class_socre * box_score);
                             boxes.push_back(Rect(left, top, int(w * ratio_w), int(h * ratio_h)));
+                            //cout << " " << left << " " << top << " " << w * ratio_w << " " << h * ratio_h << endl;
                         }
                     }
                     pdata += net_width;//指针移到下一行
@@ -314,6 +315,13 @@ void Yolo::drawPred(Mat& img, vector<Output> result, vector<Scalar> color) {
         top = max(top, labelSize.height);
         //rectangle(frame, Point(left, top - int(1.5 * labelSize.height)), Point(left + int(1.5 * labelSize.width), top + baseLine), Scalar(0, 255, 0), FILLED);
         putText(img, label, Point(left, top), FONT_HERSHEY_SIMPLEX, 1, color[result[i].id], 2);
+    
+    }
+    //输出预测框的坐标值
+    for (int i = 0; i < result.size(); i++) {
+        cout << result.size() << endl;
+        cout << "第"<<i+1<<"个矩形："<<result[i].box.x << " " << result[i].box.y << " " << result[i].box.width << " " << result[i].box.height <<" "<<"中心坐标："<<"("
+            << result[i].box.x+ result[i].box.width/2<<","<< result[i].box.y+ result[i].box.height/2<<")"<<endl;
     }
     imshow("res", img);
     //实现选择路径的保存
